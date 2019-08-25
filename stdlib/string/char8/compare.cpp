@@ -1,4 +1,4 @@
-#include <string.hpp>
+#include <string.h>
 
 char
 str::compare(const char* str0, const char* str1) {

@@ -5,16 +5,14 @@ Lock::Lock()
 
 
 void Lock::tryToLockWrite() {
-	while(info > 0) {
-		//asm("int timer");
-	}
+	while(info > 0);
+
 	this->lockWrite();
 }
 
 void Lock::tryToLockRead() {
-	while(info%2 == 1) {
-		//asm("int timer");
-	}
+	while(info%2 == 1);
+	
 	this->lockRead();
 }
 

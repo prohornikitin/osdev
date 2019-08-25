@@ -4,19 +4,19 @@ SECTIONS
 {
    . = 1M;
 
-   .readWrite : ALIGN(4K)
+   .readWrite : ALIGN(32)
    {
       *(.multiboot_header)
       *(.data)
    }
 
-   .readOnly : ALIGN(4K)
+   .readOnly : ALIGN(32)
    {
       *(.text)
 		*(.rodata)
    }
 
-   .bss : ALIGN(4K)
+   .bss : ALIGN(32)
    {
 		*(.bss)
    }

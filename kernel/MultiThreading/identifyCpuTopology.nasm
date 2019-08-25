@@ -11,7 +11,7 @@ identifyCpuTopology:
 	push rbx
 	call detectCpuVendor
 	pop rbx
-	cmp eax, 'cAMD' ;part of AuthenticAMD
+	cmp eax, 'cAMD' ;part of "AuthenticAMD"
 	je amdTopology
 
 intelTopology:

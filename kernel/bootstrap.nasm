@@ -1,9 +1,5 @@
-
-
-
-
 section .bss
-    align 16
+    align 32
 	stack_bottom:
 	    resb 16384
 	stack_top:
@@ -11,34 +7,37 @@ section .bss
 
 bits 32
 section .text
-    
-    extern runAllChecks
-
     extern checkCpuidSupport
-
+    extern checkCompatibility
+    
+    extern getValidXSDT
+    extern ACPI.XSDT
+    extern allocateAcpiMemRegion
 
     extern GDT.Code
     extern GDT.Pointer
 
+    extern multiboot2_getFramebufferInfo
 
-;    %include "GDT.nasm"
+    extern start64
+
     %include "paging/first_tables_setup.nasm"
     %include "paging/enable.nasm"
 
-    	extern start64
+
+
     	
-    	global start32
-    	start32:
-        	mov esp, stack_top ; Set up stack
+	global start32
+	start32:
+    	mov esp, stack_top ; Set up stack
+        call checkCompatibility
 
+        mov edi, ebx
+        call multiboot2_getFramebufferInfo
 
-            call checkCpuidSupport
+        lgdt [GDT.Pointer]
+        
+        call setup_page_tables
+        call enable_paging
 
-        	call runAllChecks
-
-
-    		call setup_page_tables
-    		call enable_paging
-    		
-        	lgdt [GDT.Pointer]
-        	jmp GDT.Code:start64       ; Set the code segment and enter 64-bit long mode.
+    	jmp GDT.Code : start64       ; Set the code segment and enter 64-bit long mode.

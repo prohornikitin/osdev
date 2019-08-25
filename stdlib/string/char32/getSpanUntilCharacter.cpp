@@ -1,4 +1,4 @@
-#include <string.hpp>
+#include <string.h>
 
 size_t
 str::getSpanUntilcharacter(const char32_t* str0, const char32_t* str1) {

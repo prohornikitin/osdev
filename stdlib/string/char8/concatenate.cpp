@@ -1,4 +1,4 @@
-#include <string.hpp>
+#include <string.h>
 
 void 
 str::concatenate(char* destination, const char* source) {

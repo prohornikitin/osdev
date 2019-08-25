@@ -1,22 +1,22 @@
-global getValidRSDP
+global getValidXSDT
 
 extern multiboot2_findStructByType
-extern validateCheckSum
+extern ACPI_validateCheckSum
 
 bits 32
 
-getValidRSDP:
-	mov edi, 15
+getValidXSDT:
+	mov esi, 15
 	call multiboot2_findStructByType
 	
 	add eax, 8
-	mov edx, [eax]
+	mov edx, eax
 
-	mov edi, [eax]
-	call validateCheckSum
+	mov edi, eax
+	call ACPI_validateCheckSum
 
-	add edx, 192
-	mov Dword eax, [edx]
+	add edx, 24
+	mov eax, [edx]
 	add edx, 4
-	mov Dword edx, [edx]
+	mov edx, [edx]
 	ret

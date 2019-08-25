@@ -12,6 +12,7 @@ namespace mem {
     bool isEqual(const void* restrict mem0, const void* restrict mem1, size_t n);
     size_t compare(const void* restrict mem0, const void* restrict mem1, size_t n);
     extern void copy(void* restrict destination, void* restrict source, size_t n);
+    extern void copyBackward(void* destination, void* source, size_t bytesNum);
     extern void safeMove(void* destination, void* source, size_t n);
 
     #ifndef KERNEL

@@ -1,4 +1,4 @@
-#include <string.hpp>
+#include <string.h>
 
 char32_t
 str::compare(const char32_t* str0, const char32_t* str1) {

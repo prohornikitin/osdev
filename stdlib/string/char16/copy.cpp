@@ -1,4 +1,4 @@
-#include <string.hpp>
+#include <string.h>
 
 void
 str::copy(char16_t* destination, const char16_t* source) {

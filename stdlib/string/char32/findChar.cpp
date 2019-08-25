@@ -1,4 +1,4 @@
-#include <string.hpp>
+#include <string.h>
 
 char32_t*
 str::findChar(const char32_t* source, char32_t c) {

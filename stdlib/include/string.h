@@ -9,6 +9,7 @@
     #include "string/string_class.hpp"
 #endif
 
+//typedef uint8_t char8_t ;
 
 
 namespace str {

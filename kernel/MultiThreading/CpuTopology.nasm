@@ -10,10 +10,9 @@ CpuTopology:
 		resb 1
 
 CpuDomain:
-	.lock
+	.lock:
 		resq 1
 	.domainId:
 		resd 1
 	.parentDomain:
 		resq 1
-	.

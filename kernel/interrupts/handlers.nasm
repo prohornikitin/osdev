@@ -1,6 +1,9 @@
 extern printString
 
 section .rodata
+
+
+
 error_messages:
   .zero_division db "Zero Division Error", 0
   .general_protection db "General Protection Exception", 0
@@ -18,6 +21,7 @@ error_messages:
   .virtualization_exception db "Virtualization Exception", 0
   .SIMD_FP_exception db "SIMD Floating-Point Exception", 0
   .BOUND_Range_Exceeded db "BOUND Range Exceeded", 0
+  .Spurious_Interrupt db "Spurious Interrupt had been detected" ;Temporary stub
 section .text
 
 global handleInterrupt0
@@ -244,8 +248,11 @@ handleInterrupt31:
 
 global handleInterrupt32
 handleInterrupt32:
-  extern test
-  call test
+  push rdi
+  mov rdi, error_messages.Spurious_Interrupt
+  call printString
+  pop rdi
+  hlt ;TODO: exit
   iretq
 
 global handleInterrupt33

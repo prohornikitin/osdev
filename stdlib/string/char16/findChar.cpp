@@ -1,4 +1,4 @@
-#include <string.hpp>
+#include <string.h>
 
 char16_t*
 str::findChar(const char16_t* source, char16_t c) {

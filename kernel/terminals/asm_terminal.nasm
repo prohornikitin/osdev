@@ -2,7 +2,7 @@ global printString
 global printDecimal
 
 currentSymbolPointer:
-	dq 0xB8000
+	dq 0xB8000 ;black barground, white text
 
 printString:
 	mov ecx, [currentSymbolPointer]
@@ -25,14 +25,14 @@ printDecimal:
 	.pushDigit:
 		xor rdx, rdx
 		div rdi
-		add dl, '0'
-		or dx, 7 << 8 ;black barground, white text
 		push dx
 		cmp rax, 0
 		jne .pushDigit
 	mov rdi, [currentSymbolPointer]
 	.printDigit:
 		pop dx
+		add dl, '0'
+		or dx, 7 << 8 ;black barground, white text
 		mov word [rdi], dx
 		add rdi, 2
 		cmp rbp, rsp

@@ -22,7 +22,7 @@ private:
 	Port slave_command;
 	Port master_data;
 	Port slave_data;
-	const uint8_t ICW1_INIT = 0x10;
-	const uint8_t ICW1_ICW4 = 0x01;
-	const uint8_t ICW4_8086 = 0x01;
+	const static uint8_t ICW1_INIT = 0x10;
+	const static uint8_t ICW1_ICW4 = 0x01;
+	const static uint8_t ICW4_8086 = 0x01;
 };

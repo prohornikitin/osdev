@@ -1,4 +1,4 @@
-#include <string.hpp>
+#include <string.h>
 
 void
 str::copyN(char* destination, const char* source, size_t n) {

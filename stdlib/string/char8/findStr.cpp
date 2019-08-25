@@ -1,4 +1,4 @@
-#include <string.hpp>
+#include <string.h>
 
 char*
 str::findStr(const char* source, const char* substring) {

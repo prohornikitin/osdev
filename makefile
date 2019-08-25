@@ -2,31 +2,36 @@ KERNEL_CPP_SOURCES:=kernel.cpp \
 	interrupts/PIC.cpp \
 	io/ports/ports.cpp \
 	terminals/text_terminal.cpp \
-	io/MSR/MSR.cpp \
 	MultiThreading/Lock.cpp \
+	graphics/RgbaPixel.cpp
 
-KERNEL_NASM_SOURCES:=cpuid/cpuidSupport.nasm \
-	check/printErrorNumber.nasm \
-	check/allChecks.nasm \
+
+KERNEL_NASM_SOURCES:=cpuid/checkCompatibility.nasm \
 	multiboot_header.nasm \
 	bootstrap.nasm \
 	GDT.nasm \
 	start64.nasm \
-	interrupts/APIC/LAPIC.nasm \
+	graphics/framebuffer.nasm \
+	interrupts/APIC/APIC.nasm \
+	interrupts/APIC/xAPIC.nasm \
+	interrupts/APIC/x2APIC.nasm \
+	interrupts/APIC/RegisterOffsets.nasm \
 	interrupts/handlers.nasm \
-	io/ports/ports_asm.nasm \
-	io/MSR/MSR_asm.nasm \
+	io/ports/portsCppAdapter.nasm \
+	io/MSR/MSR.nasm \
 	interrupts/IDT.nasm \
-	terminals/asm_terminal.nasm \
 	multiboot/findStruct.nasm \
 	ACPI/validateCheckSum.nasm \
 	ACPI/getValidXSDP.nasm \
+	ACPI/FindTable.nasm \
+	ACPI/Data.nasm \
+	ACPI/allocateAcpiMemRegion.nasm \
 	cpuid/detectCpuVendor.nasm \
 	MultiThreading/simpleLock.nasm \
 	MultiThreading/CpuTopology.nasm \
 	MultiThreading/identifyCpuTopology.nasm \
-	MultiThreading/CpuTopologyDomain.nasm
-
+	MultiThreading/CpuTopologyDomain.nasm \
+	terminals/asm_terminal.nasm
 
 
 STDLIB_CPP_SOURCES:=string/char8/len.cpp \
@@ -57,13 +62,14 @@ STDLIB_CPP_SOURCES:=string/char8/len.cpp \
 	string/char32/findChar.cpp \
 	string/char32/findStr.cpp \
 	error/error.cpp \
-	memory/find.cpp
+	memory/find.cpp \
+	memory/safeMove.cpp
 
 STDLIB_NASM_SOURCES:=memory/copy.nasm \
-	memory/safeMove.nasm \
 	memory/isEqual.nasm \
 	memory/set.nasm \
-	memory/compare.nasm
+	memory/compare.nasm \
+	memory/copyBackward.nasm
 
 
 
@@ -82,13 +88,15 @@ EXECUTABLE=$(BUILD_DIR)/myos.bin
 INCLUDE_DIRS=-I kernel/include -I stdlib/include	
 
 
-CPP_FLAGS=$(INCLUDE_FOLDERS) -Ofast -ftree-vectorize -fno-stack-protector -ffreestanding -mno-red-zone -Wall -m64 -Wextra -fno-exceptions -fno-rtti -mavx #-std=c++2a 
+CPP_FLAGS=$(INCLUDE_FOLDERS) -Ofast -fno-stack-protector -ffreestanding -mno-red-zone -Wall -m64 -Wextra -fno-exceptions -fno-rtti -ftree-vectorize -funroll-loops -mavx#-march=znver2 -std=c++2a 
 NASM_FLAGS=-f elf64 -w all $(INCLUDE_DIRS)
 LD_FLAGS=-n -T link.ld $(INCLUDE_DIRS)
 
-all: $(EXECUTABLE) $(ISO)
+all: $(ISO)
 
-rebuild: clean all
+rebuild: clean 
+	make all
+
 
 clean:
 	rm -f $(OBJECTS)
@@ -96,14 +104,27 @@ clean:
 	rm -rf $(BUILD_DIR)/iso/
 	rm -rf $(ISO)
 
-$(ISO):
+
+CREATE_ISO_DIR:
 	mkdir -p $(BUILD_DIR)/iso/boot/grub
-	cp $(EXECUTABLE) $(BUILD_DIR)/iso/boot/
+
+copyGrubCfg: CREATE_ISO_DIR
 	cp grub.cfg $(BUILD_DIR)/iso/boot/grub/
+
+copyExecutable: CREATE_ISO_DIR $(EXECUTABLE)
+	cp $(EXECUTABLE) $(BUILD_DIR)/iso/boot/
+
+$(ISO): copyGrubCfg copyExecutable 
 	grub-mkrescue -o $(ISO) $(BUILD_DIR)/iso
 	#--xorriso=/home/prokhor40/opt/source_packages/bin/xorriso
 
+debug: all run
+
+debug_bios: all run_bios
+
 run:
+	qemu-system-x86_64 -enable-kvm -cpu host -bios /usr/share/ovmf/x64/OVMF_CODE.fd -cdrom $(BUILD_DIR)/myos.iso
+run_bios:
 	qemu-system-x86_64 -enable-kvm -cpu host -cdrom $(BUILD_DIR)/myos.iso
 
 

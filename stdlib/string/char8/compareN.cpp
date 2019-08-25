@@ -1,4 +1,4 @@
-#include <string.hpp>
+#include <string.h>
 
 char
 str::compareN(const char* str0, const char* str1, size_t n) {
