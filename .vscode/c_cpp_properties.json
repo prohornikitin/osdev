@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        // {
+        //     "name": "Linux",
+        //     "includePath": [
+        //         "${workspaceFolder}/**",
+        //         "${workspaceFolder}/**"
+        //     ],
+        //     "defines": [],
+        //     "compilerPath": "/usr/bin/clang",
+        //     "cppStandard": "c++14",
+        //     "intelliSenseMode": "linux-clang-x64"
+        // },
+        {
+            "name": "osdev",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/src/kernel64/include/**",
+                "${workspaceFolder}/src/bootstrap/include/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-clang-x64"
+        }
+    ],
+    "version": 4
+}
