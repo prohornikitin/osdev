@@ -4,7 +4,7 @@
 
 namespace bootstrap {
 
-    extern "C" void bootstrap_loader64(usize multiboot2_ptr) {
+    extern "C" void bootstrap_loader64(u32 multiboot2_ptr) {
 		terminal::TextTerminal term;
 		term.write("TODO bootstrap_loader64()");
 		//~ auto* tag = multiboot2::findTag<MemoryMap>(multiboot2_ptr, 6);

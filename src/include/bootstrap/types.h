@@ -12,8 +12,7 @@ typedef int16_t i16;
 typedef int32_t i32;
 typedef int64_t i64;
 
-typedef unsigned char byte;
-typedef uint32_t usize;
-typedef int32_t isize;
+//~ typedef uint32_t usize;
+//~ typedef int32_t isize;
 
 

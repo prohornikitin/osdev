@@ -1,3 +1,4 @@
+bits 32
 section .bss
 	align 32
 	stack_bottom:
@@ -5,34 +6,39 @@ section .bss
 	stack_top:
 
 
-bits 32
 section .text
-	extern checkCompatibility
+global hlt;
+hlt:
+	hlt
+	jmp hlt
 
-	extern GDT.Code
-	extern GDT.Pointer
+extern checkCompatibility
 
-	extern bootstrap_cmain
-	extern bootstrap_loader64
+extern GDT.Code
+extern GDT.Pointer
 
-	%include "first_page_tables_setup.nasmi"
-	%include "enable_paging.nasmi"
+extern bootstrap_cmain
+extern bootstrap_loader64
 
-		
-	global start32
-	start32:
-		mov esp, stack_top ; Set up stack
+%include "first_page_tables_setup.nasmi"
+%include "enable_paging.nasmi"
 
-		push ebx ; Preserve pointer to multiboot2 structure
-		call checkCompatibility
-		
-		lgdt [GDT.Pointer]
 
-		call bootstrap_cmain
+global start32
+start32:
+	mov esp, stack_top ; Set up stack
 
-		call setup_page_tables
-		call enable_paging
-		
-		hlt
-		call bootstrap_loader64 
+	push ebx ; Preserve pointer to multiboot2 structure
+	call checkCompatibility
+	
+	lgdt [GDT.Pointer]
+
+	call bootstrap_cmain
+
+	;~ call setup_page_tables
+	;~ call enable_paging
+	
+	call hlt
+	pop ebx ; Pointer to multiboot2 structure
+	call bootstrap_loader64 
 		

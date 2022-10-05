@@ -44,4 +44,5 @@ section .rodata
             dd 0                         ; Reserved
         .Pointer:
             dw $ - GDT - 1               ; Limit.
-            dq GDT                       ; Base.
+            dd GDT                       ; Base (low)
+            dd 0						 ; Base (high)

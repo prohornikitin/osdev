@@ -1,27 +1,24 @@
 OUTPUT(elf64-x86-64)
 ENTRY(start64)
 
-
 SECTIONS
 {
-	. = 1M;
+	. = 0;
 
-	.readOnly : ALIGN(32)
+	.readOnly :
 	{
 		*(.multiboot_header)
 		*(.text)
 		*(.rodata)
 	}
 
-	.readWrite : ALIGN(32)
+	.readWrite :
 	{
 	  *(.data)
 	}
 
-	.bss : ALIGN(32)
+	.bss :
 	{
 		*(.bss)
 	}
-
-
 }

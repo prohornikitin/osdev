@@ -42,6 +42,12 @@ namespace multiboot2 {
 			u32 reserved;
 		}__attribute__((packed));
 		Entry entries[];
+		
+		u32 entriesCount() {
+			u32 entriesSize = size - sizeof(type) - sizeof(size) - 
+				sizeof(entry_size) - sizeof(entry_version);
+			return entriesSize / entry_size;
+		}
 	}__attribute__((packed));
 
 
@@ -106,7 +112,7 @@ namespace multiboot2 {
 
 
 	template<class T>
-	T* findTag(usize ptr) {
+	T* findTag(u32 ptr) {
 		u32* ptr32 = (u32*)ptr;
 		u32 total_size = ptr32[0];
 		TagBeginning* end = (TagBeginning*)(ptr + total_size);

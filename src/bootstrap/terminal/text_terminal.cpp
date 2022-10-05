@@ -13,13 +13,13 @@ namespace terminal {
  
 
     void TextTerminal::restoreState() {
-        for(usize i=0; i<bufferSize; ++i) {
+        for(u32 i=0; i<bufferSize; ++i) {
             activeTerminal[i] = buffer[i];
         }
     }
 
     void TextTerminal::saveScreenToBuffer() {
-        for(usize i=0; i<bufferSize; ++i) {
+        for(u32 i=0; i<bufferSize; ++i) {
             buffer[i] = activeTerminal[i];
         }
     }
@@ -27,13 +27,13 @@ namespace terminal {
     void TextTerminal::clearScreen() {
         column = 0;
         row = 0;
-        for(usize i=0; i<height*width; ++i) {
+        for(u32 i=0; i<height*width; ++i) {
             putChar(' ');
         }
     }
 
     void TextTerminal::setColor(Color text, Color background) {
-        color = (uint8_t)text | (uint8_t)background << 4;
+        color = (u8)text | (u8)background << 4;
     }
 
     void TextTerminal::putChar(char c) {
@@ -58,7 +58,7 @@ namespace terminal {
         	//TODO: beep
         	break;
     	default:
-        	const usize index = row * width + column;
+        	const u32 index = row * width + column;
         	activeTerminal[index] = (c | (u16)color << 8);
         	++column;
     	}
@@ -72,22 +72,44 @@ namespace terminal {
     }
 
     void TextTerminal::write(const char* str) {
-        for(usize i=0; str[i]!=0; ++i) {
+        for(u32 i=0; str[i]!=0; ++i) {
             putChar(str[i]);
         }
     }
+    
+    static inline char digitToChar(unsigned digit) {
+		if(digit <= 9) {
+			return digit + '0';
+		} else {
+			return digit - 10 + 'A';
+		}
+	}
 
     void TextTerminal::write(u32 num, int radix) {
         char buff[20];
-        usize i = 0;
+        u32 i = 0;
         do {
-            buff[i] = num % radix;
+            buff[i] = digitToChar(num % radix);
             num /= radix;
             i++;
         } while(num != 0);
         while(i != 0) {
             i--;
-            putChar(buff[i] + '0');
+            putChar(buff[i]);
+        }
+    }
+    
+    void TextTerminal::write(u64 num, int radix) {
+        char buff[20];
+        u32 i = 0;
+        do {
+            buff[i] = digitToChar(num % radix);
+            num /= radix;
+            i++;
+        } while(num != 0);
+        while(i != 0) {
+            i--;
+            putChar(buff[i]);
         }
     }
 }

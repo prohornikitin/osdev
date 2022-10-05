@@ -6,16 +6,20 @@ SECTIONS
 {
 	. = 1M;
 
-	.readOnly : ALIGN(32)
+	.text : ALIGN(32)
 	{
 		*(.multiboot_header)
 		*(.text)
+	}
+
+	.rodata : ALIGN(32)
+	{
 		*(.rodata)
 	}
 
-	.readWrite : ALIGN(32)
+	.data : ALIGN(32)
 	{
-	  *(.data)
+		*(.data)
 	}
 
 	.bss : ALIGN(32)
