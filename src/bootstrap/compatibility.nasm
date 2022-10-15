@@ -3,7 +3,6 @@ section .rodata
 	error db "Not compatible", 0
 
 
-section .text
 
 global checkCompatibility
 extern printString
@@ -16,7 +15,7 @@ extern printString
 %define FEATURE_EDX_LONGMODE 1 << 29
 %define FEATURES_EDX FEATURE_EDX_MSR | FEATURE_EDX_APIC | FEATURE_EDX_LONGMODE
 
-
+section .text
 checkCompatibility:
 	mov eax, CPUID_ARG_HIGHEST_ARG
 	cpuid                  

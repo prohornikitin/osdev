@@ -2,21 +2,19 @@ bits 32
 section .bss
 	align 32
 	stack_bottom:
-		resb 16384
+		resb 0x4000
 	stack_top:
 
-
 section .text
-global hlt;
+
+global hlt
 hlt:
 	hlt
 	jmp hlt
 
 extern checkCompatibility
-
 extern GDT.Code
 extern GDT.Pointer
-
 extern bootstrap_cmain
 extern bootstrap_loader64
 
@@ -24,6 +22,7 @@ extern bootstrap_loader64
 %include "enable_paging.nasmi"
 
 
+section .text
 global start32
 start32:
 	mov esp, stack_top ; Set up stack

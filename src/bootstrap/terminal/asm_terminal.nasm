@@ -1,10 +1,15 @@
 bits 32
 
-global printString
-global printDecimal
+section .data
 
 currentSymbolPointer:
 	dd 0xB8000 ;black barground, white text
+
+
+section .text
+
+global printString
+global printDecimal
 
 printString:
 	mov edi, [esp+4]

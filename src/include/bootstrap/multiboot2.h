@@ -43,11 +43,7 @@ namespace multiboot2 {
 		}__attribute__((packed));
 		Entry entries[];
 		
-		u32 entriesCount() {
-			u32 entriesSize = size - sizeof(type) - sizeof(size) - 
-				sizeof(entry_size) - sizeof(entry_version);
-			return entriesSize / entry_size;
-		}
+		u32 entriesCount();
 	}__attribute__((packed));
 
 
