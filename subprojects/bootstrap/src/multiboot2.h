@@ -43,7 +43,7 @@ namespace multiboot2 {
 		}__attribute__((packed));
 		Entry entries[];
 		
-		u32 entriesCount();
+		u32 entriesCount() const;
 	}__attribute__((packed));
 
 
@@ -108,11 +108,15 @@ namespace multiboot2 {
 
 
 	template<class T>
-	T* findTag(u32 ptr) {
-		u32* ptr32 = (u32*)ptr;
+	const T* findTag(u32 multiboot_ptr, T* lastFound = nullptr) {
+		u32* ptr32 = (u32*)multiboot_ptr;
 		u32 total_size = ptr32[0];
-		TagBeginning* end = (TagBeginning*)(ptr + total_size);
+		TagBeginning* end = (TagBeginning*)(multiboot_ptr + total_size);
 		TagBeginning* i = (TagBeginning*)(ptr32 + 2);
+		if(lastFound != nullptr) {
+			i = (TagBeginning*)lastFound;
+		}
+		
 		while(i < end) {
 			if(i->type == T::type_static) {
 				return (T*)i;
@@ -121,6 +125,18 @@ namespace multiboot2 {
 		}
 		return nullptr;
 	}
+	
+/*	template<class T>
+	std::optional<T&> findTagIf(u32 multiboot_ptr, std::function<bool(const T&)> condition) {
+		T* last = findTag(multiboot_ptr);
+		while(last != nullptr) {
+			if(condition(*last)) {
+				return *last
+			}
+			last = findTag(multiboot_ptr, c)
+		}
+		findTag();
+	}*/
 
 } //multiboot2
 } //bootstrap

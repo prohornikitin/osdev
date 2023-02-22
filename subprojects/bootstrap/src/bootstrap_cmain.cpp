@@ -21,21 +21,28 @@ namespace bootstrap {
     using multiboot2::MemoryMap;
     using multiboot2::Module;
 
-    extern "C" void bootstrap_cmain(u32 multiboot2_ptr) {
-		terminal::TextTerminal term;
-		term.clearScreen();
-		auto* module = multiboot2::findTag<Module>(multiboot2_ptr);
+	void printMemMap(terminal::TextTerminal & term, u32 multiboot2_ptr) {
 		auto* memMap = multiboot2::findTag<MemoryMap>(multiboot2_ptr);
-		requireNotNull(term, module);
 		requireNotNull(term, memMap);
+		term.write("Start, End, Type\n");
 		for(u32 i = 0; i < memMap->entriesCount(); i++) {
-			term.write(memMap->entries[i].base_addr, 16);
+			auto addr = memMap->entries[i].base_addr;
+			term.write(addr, 16);
 			term.write(" ");
-			term.write(memMap->entries[i].length, 16);
+			term.write(addr + memMap->entries[i].length, 16);
 			term.write(" ");
 			term.write(memMap->entries[i].type);
 			term.write("\n");
 		}
+	}
+
+    extern "C" void bootstrap_cmain(u32 multiboot2_ptr) {
+		terminal::TextTerminal term;
+		term.clearScreen();
+		printMemMap(term, multiboot2_ptr);
+		
+		auto* module = multiboot2::findTag<Module>(multiboot2_ptr);
+		requireNotNull(term, module);
 		term.write(module->addr_start, 16);
 		term.write(" ");
 		term.write(module->addr_end, 16);

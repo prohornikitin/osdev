@@ -1,4 +1,4 @@
-%include "TSS.nasmi"
+%include "TSS.asmi"
 
 global GDT.Data
 global GDT.Code
@@ -20,7 +20,7 @@ section .rodata
             dw 0                         ; Base (low).
             db 0                         ; Base (middle)
             db 10011010b                 ; Access (exec/read).
-            db 10101111b                 ; Granularity, 64 bits flag, limit19:16.
+            db 10101111b                 ; Granularity, 64 bits flag
             db 0                         ; Base (high).
             dd 0                         ; Base (very high)
             dd 0                         ; Reserved

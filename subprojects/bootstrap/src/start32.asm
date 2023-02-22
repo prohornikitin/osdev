@@ -18,9 +18,8 @@ extern GDT.Pointer
 extern bootstrap_cmain
 extern bootstrap_loader64
 
-%include "first_page_tables_setup.nasmi"
-%include "enable_paging.nasmi"
-
+%include "first_page_tables_setup.asmi"
+%include "enable_paging.asmi"
 
 section .text
 global start32
